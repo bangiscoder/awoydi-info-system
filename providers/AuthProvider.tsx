@@ -13,12 +13,23 @@ import { auth } from "@/lib/firebase";
 
 import { AuthContext } from "@/context/AuthContext";
 
+import { getUserProfile }
+  from "@/services/userService";
+
 export default function AuthProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
   const [user, setUser] =
+    useState(null);
+
+    /*
+  |--------------------------------------------------------------------------
+  | Firestore User Profile
+  |--------------------------------------------------------------------------
+  */
+  const [profile, setProfile] =
     useState(null);
 
   const [loading, setLoading] =
@@ -28,8 +39,31 @@ export default function AuthProvider({
     const unsubscribe =
       onAuthStateChanged(
         auth,
-        (firebaseUser) => {
+        async (firebaseUser) => {
+
+          // Store Firebase user
           setUser(firebaseUser);
+
+          /*
+          --------------------------------------------------------------------------
+          | Fetch Firestore Profile
+          --------------------------------------------------------------------------
+          */
+          if (firebaseUser) {
+
+            const userProfile =
+              await getUserProfile(
+                firebaseUser.uid
+              );
+
+            setProfile(userProfile);
+
+          } else {
+
+            setProfile(null);
+
+          }
+
           setLoading(false);
         }
       );
@@ -41,6 +75,7 @@ export default function AuthProvider({
     <AuthContext.Provider
       value={{
         user,
+        profile,
         loading,
       }}
     >

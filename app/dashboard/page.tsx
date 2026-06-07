@@ -5,7 +5,11 @@ import { useAuth } from "@/context/AuthContext";
 
 export default function Dashboard() {
   // Get the currently logged-in user and loading state
-  const { user, loading } = useAuth();
+  const { 
+    user,
+    profile,
+    loading
+   } = useAuth();
 
   // Show loading message while Firebase checks authentication state
   if (loading) {
@@ -27,6 +31,26 @@ export default function Dashboard() {
       <p>
         <strong>Email:</strong>{" "}
         {user?.email}
+      </p>
+
+      {/* Firestore Profile Name */}
+      <p>
+        <strong>Name:</strong>{" "}
+        {profile?.fullName}
+      </p>
+
+      {/* User Role */}
+      <p>
+        <strong>Role:</strong>{" "}
+        {profile?.role}
+      </p>
+
+      {/* User Status */}
+      <p>
+        <strong>Status:</strong>{" "}
+        {profile?.isActive
+          ? "Active"
+          : "Inactive"}
       </p>
 
       {/* Firebase Authentication UID */}

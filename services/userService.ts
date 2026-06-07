@@ -5,24 +5,30 @@ import {
 
 import { db } from "@/lib/firebase";
 
+/*
+|--------------------------------------------------------------------------
+| Get User Profile
+|--------------------------------------------------------------------------
+| Fetches Firestore document:
+|
+| users/{uid}
+|--------------------------------------------------------------------------
+*/
 export const getUserProfile =
   async (uid: string) => {
 
-    const docRef = doc(
+    const userRef = doc(
       db,
       "users",
       uid
     );
 
-    const docSnap =
-      await getDoc(docRef);
+    const userSnap =
+      await getDoc(userRef);
 
-    if (!docSnap.exists()) {
+    if (!userSnap.exists()) {
       return null;
     }
 
-    return {
-      uid,
-      ...docSnap.data(),
-    };
+    return userSnap.data();
   };
