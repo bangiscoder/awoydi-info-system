@@ -3,6 +3,7 @@
 // Import our custom authentication hook
 import ProtectedRoute
   from "@/components/auth/ProtectedRoute";
+import RoleGuard from "@/components/auth/RoleGuard";
 
 import { useAuth }
   from "@/context/AuthContext";
@@ -50,8 +51,8 @@ const handleLogout = async () => {
   // Display dashboard information
   return (
   <ProtectedRoute>
-
-    <div className="p-10">
+    <RoleGuard allowedRole="USER">
+      <div className="p-10">
 
       <h1 className="text-2xl font-bold mb-4">
         User Dashboard
@@ -82,6 +83,7 @@ const handleLogout = async () => {
 
     </div>
 
+    </RoleGuard>
   </ProtectedRoute>
 );
 }

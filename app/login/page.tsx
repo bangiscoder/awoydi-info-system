@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { login } from "@/lib/auth";
+import { getUserProfile }
+  from "@/services/userService";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -25,9 +27,51 @@ export default function LoginPage() {
     try {
       setLoading(true);
 
-      await login(email, password);
+      /*
+|--------------------------------------------------------------------------
+| Authenticate User
+|--------------------------------------------------------------------------
+*/
+const credential =
+  await login(
+    email,
+    password
+  );
 
-      router.push("/dashboard");
+/*
+|--------------------------------------------------------------------------
+| Load Firestore Profile
+|--------------------------------------------------------------------------
+*/
+const profile =
+  await getUserProfile(
+    credential.user.uid
+  );
+    console.log(
+    "Profile:",
+    profile
+  );
+
+      /*
+      |--------------------------------------------------------------------------
+      | Redirect Based On Role
+      |--------------------------------------------------------------------------
+      */
+      if (
+        profile?.role === "ADMIN"
+      ) {
+
+        router.push(
+          "/admin/dashboard"
+        );
+
+      } else {
+
+        router.push(
+          "/dashboard"
+        );
+
+      }
     } catch (err: any) {
       setError(err.message);
     } finally {
