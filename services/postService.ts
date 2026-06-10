@@ -61,6 +61,43 @@ export const createPost = async (
 
 /*
 |--------------------------------------------------------------------------
+| Get Recent Posts
+|--------------------------------------------------------------------------
+*/
+import {
+  limit,
+} from "firebase/firestore";
+
+export const getRecentPosts =
+  async (
+    limitCount = 4
+  ) => {
+
+    const q = query(
+      collection(
+        db,
+        "posts"
+      ),
+      orderBy(
+        "createdAt",
+        "desc"
+      ),
+      limit(limitCount)
+    );
+
+    const snapshot =
+      await getDocs(q);
+
+    return snapshot.docs.map(
+      (doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      })
+    );
+  };
+  
+/*
+|--------------------------------------------------------------------------
 | Get All Posts
 |--------------------------------------------------------------------------
 */

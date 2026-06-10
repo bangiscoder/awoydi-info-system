@@ -18,7 +18,15 @@ import {
 |--------------------------------------------------------------------------
 */
 
-export default function RecentAnnouncements() {
+interface Props {
+  onViewPost: (
+    post: any
+  ) => void;
+} // This is to ensure that the RecentAnnouncements component can accept the onViewPost prop, even if it's not used within this component. This allows for better integration with parent components that may pass this prop down to RecentAnnouncements.
+
+export default function RecentAnnouncements({
+  onViewPost,
+}: Props) {
 
   const [
     posts,
@@ -114,6 +122,22 @@ export default function RecentAnnouncements() {
                   >
                     {post.priority}
                   </p>
+
+                  <button
+                    onClick={() =>
+                        onViewPost(post)
+                    }
+                    className="
+                        mt-3
+                        bg-blue-600
+                        text-white
+                        px-3
+                        py-2
+                        rounded
+                    "
+                    >
+                    Read More
+                </button>
 
                 </div>
 

@@ -1,42 +1,94 @@
 "use client";
 
-import ProtectedRoute
-  from "@/components/auth/ProtectedRoute";
+import AdminHeader
+  from "@/components/admin/AdminHeader";
 
-import RoleGuard
-  from "@/components/auth/RoleGuard";
+import HeroBanner
+  from "@/components/admin/HeroBanner";
 
-import { useAuth }
-  from "@/context/AuthContext";
+import StatsCards
+  from "@/components/admin/StatsCards";
+
+import RecentAnnouncements
+  from "@/components/admin/RecentAnnouncements";
+
+import AnnouncementList
+  from "@/components/admin/AnnouncementList";
+
+import AnnouncementRow
+  from "@/components/admin/AnnouncementRow";
+
+import { useState } from "react";
+
+import AnnouncementModal
+  from "@/components/admin/modals/AnnouncementModal";
+
+const RecentAnnouncementsComponent = RecentAnnouncements as any;
+
+/*
+|--------------------------------------------------------------------------
+| Admin Dashboard
+|--------------------------------------------------------------------------
+*/
 
 export default function AdminDashboard() {
 
-  const { profile } = useAuth();
+  const [selectedPost, setSelectedPost] =
+    useState<any>(null);
 
-  return ( 
-    <div className="p-10">
+  const [showModal, setShowModal] =
+    useState(false);
 
-      <h1 className="text-3xl font-bold">
-        Admin Dashboard
-      </h1>
+  const handleViewPost =
+    (post: any) => {
 
-      <p>
-        Welcome Administrator
-      </p>
+      setSelectedPost(post);
 
-      <p>
-        Welcome,
-        {" "}
-        {profile?.fullName}
-      </p>
+      setShowModal(true);
 
-      <p>
-        Role:
-        {" "}
-        {profile?.role}
-      </p>
+    };
+
+  return (
+    <div
+      className="
+        min-h-screen
+        bg-gray-100
+      "
+    >
+
+      <AdminHeader />
+
+      <main
+        className="
+          max-w-7xl
+          mx-auto
+          px-6
+          py-8
+        "
+      >
+
+        <HeroBanner />
+
+        <StatsCards />
+
+        <RecentAnnouncements
+          onViewPost={handleViewPost}
+        />
+
+        <AnnouncementList
+          onViewPost={handleViewPost}
+        />
+
+        <AnnouncementModal
+          post={selectedPost}
+          isOpen={showModal}
+          onClose={() =>
+            setShowModal(false)
+          }
+        />
+
+      </main>
 
     </div>
-
   );
 }
