@@ -10,7 +10,22 @@ import ProtectedRoute
 import RoleGuard
   from "@/components/auth/RoleGuard";
 
+import { useAuth }
+  from "@/context/AuthContext";
+
+import { profile } from "console";
+
 export default function CreatePostPage() {
+
+     /*
+    |--------------------------------------------------------------------------
+    | Logged In User
+    |--------------------------------------------------------------------------
+    */
+    const {
+        user,
+        profile,
+    } = useAuth();
 
   const handleCreatePost =
     async () => {
@@ -18,6 +33,7 @@ export default function CreatePostPage() {
       try {
 
         await createPost({
+
           title:
             "Test Announcement",
 
@@ -34,10 +50,10 @@ export default function CreatePostPage() {
             "NORMAL",
 
           authorId:
-            "TEST",
+            user?.uid,
 
-          authorName:
-            "Administrator",
+            authorName:
+            profile?.fullName,
 
           status:
             "PUBLISHED",
@@ -57,39 +73,40 @@ export default function CreatePostPage() {
 
     };
 
-  return (
+    return (
 
-  <ProtectedRoute>
+    <ProtectedRoute>
 
-    <RoleGuard
-      allowedRole="ADMIN"
-    >
+        <RoleGuard
+        allowedRole="ADMIN"
+        >
 
-    <div className="p-10">
+        <div className="p-10">
 
-      <h1 className="text-3xl font-bold mb-5">
-        Create Post Test
-      </h1>
+            <h1 className="text-3xl font-bold mb-5">
+            Create Post Test
+            </h1>
 
-      <button
-        onClick={
-          handleCreatePost
-        }
-        className="
-          bg-blue-600
-          text-white
-          px-4
-          py-2
-          rounded
-        "
-      >
-        Create Test Post
-      </button>
+            <button
+            onClick={
+                handleCreatePost
+            }
+            className="
+                bg-blue-600
+                text-white
+                px-4
+                py-2
+                rounded
+            "
+            >
+            Create Test Post
+            </button>
 
-    </div>
+        </div>
 
-    </RoleGuard>
+        </RoleGuard>
 
-  </ProtectedRoute>
-  );
+    </ProtectedRoute>
+
+    );
 }
