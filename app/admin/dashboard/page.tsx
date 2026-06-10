@@ -13,37 +13,30 @@ export default function AdminDashboard() {
 
   const { profile } = useAuth();
 
-  return (
-    <ProtectedRoute>
+  return ( 
+    <div className="p-10">
 
-      <RoleGuard allowedRole="ADMIN">
+      <h1 className="text-3xl font-bold">
+        Admin Dashboard
+      </h1>
 
-        <div className="p-10">
+      <p>
+        Welcome Administrator
+      </p>
 
-          <h1 className="text-3xl font-bold">
-            Admin Dashboard
-          </h1>
+      <p>
+        Welcome,
+        {" "}
+        {profile?.fullName}
+      </p>
 
-          <p>
-            Welcome Administrator
-          </p>
+      <p>
+        Role:
+        {" "}
+        {profile?.role}
+      </p>
 
-          <p>
-            Welcome,
-            {" "}
-            {profile?.fullName}
-          </p>
+    </div>
 
-          <p>
-            Role:
-            {" "}
-            {profile?.role}
-          </p>
-
-        </div>
-
-      </RoleGuard>
-
-    </ProtectedRoute>
   );
 }
