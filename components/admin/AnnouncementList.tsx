@@ -18,7 +18,16 @@ import AnnouncementRow
 import {
   deletePost,
 } from "@/services/postService";
-import DeleteAnnouncementModal from "./modals/DeleteAnnouncementModal";
+
+import DeleteAnnouncementModal
+    from "./modals/DeleteAnnouncementModal";
+
+import EditAnnouncementModal
+  from "@/components/admin/modals/EditAnnouncementModal";
+
+import {
+  updatePost,
+} from "@/services/postService";
 
 
 
@@ -40,6 +49,7 @@ interface Props {
 // This is the Component for listing all announcements in the admin dashboard. It fetches all posts and displays them in a list format using the AnnouncementRow component. The onViewPost prop is passed down to each AnnouncementRow to handle viewing individual post details when a row is clicked.
 export default function AnnouncementList({onViewPost,}: Props) {
 
+    // Delete post handler
     const handleDelete =
         async () => {
 
@@ -56,6 +66,7 @@ export default function AnnouncementList({onViewPost,}: Props) {
         await loadPosts();
     };
 
+    //Delete Post onclick handler
     const handleDeleteClick =
         (post: any) => {
 
@@ -64,6 +75,33 @@ export default function AnnouncementList({onViewPost,}: Props) {
             setShowDeleteModal(true);
 
         };
+
+    const handleUpdate =
+        async (
+            id: string,
+            data: any
+        ) => {
+
+            await updatePost(
+            id,
+            data
+            );
+
+            setShowEditModal(false);
+
+            await loadPosts();
+            
+        };
+    
+    //Edit Click Handler
+    const handleEditClick =
+        (post: any) => {
+
+            setSelectedPost(post);
+
+            setShowEditModal(true);
+
+    };
 
     const [selectedPost, setSelectedPost] =
         useState<any>(null);
@@ -79,6 +117,9 @@ export default function AnnouncementList({onViewPost,}: Props) {
 
     const [showDeleteModal, setShowDeleteModal] =
         useState(false);
+
+    const [showEditModal, setShowEditModal] =
+         useState(false);
 
 
     //The loadPosts function is responsible for fetching the list of all posts from the backend using the getPosts service function. It is called inside a useEffect hook to ensure that the posts are loaded when the component mounts. The fetched posts are stored in the local state using the setPosts function, which allows the component to render the list of announcements dynamically based on the data received from the backend.
@@ -167,6 +208,7 @@ export default function AnnouncementList({onViewPost,}: Props) {
                     serialNumber= {index + 1}
                     onViewPost={onViewPost}
                     onDelete={handleDeleteClick}
+                    onEdit={handleEditClick}
                     />
 
                 )
@@ -183,6 +225,15 @@ export default function AnnouncementList({onViewPost,}: Props) {
                 setShowDeleteModal(false)
             }
             onConfirm={handleDelete}
+            />
+
+            <EditAnnouncementModal
+                post={selectedPost}
+                isOpen={showEditModal}
+                onClose={() =>
+                    setShowEditModal(false)
+                }
+                onSave={handleUpdate}
             />
 
     </section>

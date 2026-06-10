@@ -21,13 +21,18 @@ interface AnnouncementRowProps {
    onDelete: (
     post: any
   ) => void;
+
+  onEdit: (
+    post: any
+ ) => void;
 }
 
 export default function AnnouncementRow({
   post,
   serialNumber,
   onViewPost,
-  onDelete
+  onDelete,
+  onEdit
 }: AnnouncementRowProps) {
 
   return (
@@ -188,6 +193,8 @@ export default function AnnouncementRow({
             py-2
             rounded
           "
+          onClick={() => 
+            onEdit(post)}
         >
           Edit
         </button>
